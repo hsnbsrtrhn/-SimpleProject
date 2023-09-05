@@ -1,0 +1,47 @@
+name: dockercompose2988144151854513464
+services:
+  mongo:
+    image: mongo:latest
+    networks:
+      default: null
+  myfavcryptolist:
+    build:
+      context: C:\Users\Hasan\source\repos\BtcTurkIntern\MyFavCryptoList
+      dockerfile: MyFavCryptoList/Dockerfile
+    depends_on:
+      mongo:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: myfavcryptolist-image
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 443
+      protocol: tcp
+    - mode: ingress
+      target: 8080
+      published: "8080"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: C:\Users\Hasan\AppData\Roaming/Microsoft/UserSecrets
+      target: C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Hasan\AppData\Roaming/ASP.NET/Https
+      target: C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https
+      read_only: true
+      bind:
+        create_host_path: true
+networks:
+  default:
+    name: dockercompose2988144151854513464_default
